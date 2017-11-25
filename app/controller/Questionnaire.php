@@ -147,7 +147,7 @@ class Questionnaire extends Common
      * 导入问卷星
      */
     public function getPostData(){
-        $data = input('get.');
+        $data = input('post.');
         $now = time();
         file_put_contents('./public/data/questionnaire/'.$now.'.txt', $data);
     }
