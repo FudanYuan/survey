@@ -1,0 +1,316 @@
+{include file="Common/top" title="首页" metas='' /}
+{if condition="authority('Hospital')"}
+<style>
+    .table img{
+        width: 40px;
+        height: 40px;
+        border-radius: 50em;
+        -moz-border-radius: 50em;
+        -webkit-border-radius: 50em;
+    }
+
+    .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{
+        vertical-align: middle;
+    }
+</style>
+<div class="main-container">
+    <div class="padding-md">
+        <ul class="breadcrumb">
+            <li><span class="primary-font"><i class="icon-home"></i></span><a href="__PRO_PATH__/">首页</a></li>
+            <li>医院信息</li>
+        </ul>
+
+        <div id="hospital">
+            <div class="list-search">
+                <form action="" class="form-inline" method="post" id="main-form">
+                    <div class="form-group">
+                        <label for="name">医院名称：</label>
+                        <input name="name" class="form-control" id="name" style="width:150px" value=""/>
+                    </div>
+                    <div class="form-group">
+                        <label for="district">所在地址：</label>
+                        {include file="Common/district" /}
+                    </div>
+                    <a class="btn btn-info" href="javascript:;" onclick="submit()">查询</a>
+                </form>
+            </div>
+            <div class="list-btns">
+                {if condition="authority('HospitalCreate')"}
+                <div class="btn-group">
+                    <button type="button" class="btn btn-success" @click="create">新建</button>
+                </div>
+                {/if}
+                {if condition="authority('HospitalRemove')"}
+                <div class="btn-group">
+                    <a href="javascript:;" class="btn btn-default" @click="remove([])">删除</a>
+                </div>
+                {/if}
+            </div>
+            <table class="table table-hover" style="background:#fff;">
+                <thead>
+                <tr>
+                    <th><input type="checkbox" v-model="check_all" @click="checkAll"/></th>
+                    <th>医院名称</th>
+                    <th>院长姓名</th>
+                    <th>医院标志</th>
+                    <th>联系方式</th>
+                    <th>电子邮箱</th>
+                    <th>医院地址</th>
+                    <th>邮编</th>
+                    <th>医院类型</th>
+                    <th>医院等级</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <template  v-if="list.length != 0">
+                    <tr v-for="(model, index) in list">
+                        <td><input type="checkbox" v-model="select" :value="model.id" @click="selectClick(model.id)"/></td>
+                        <td>{{model.name | formatText(22, model.name)}}</td>
+                        <td>{{model.master}}</td>
+                        <td><img :src="model.logo != '' ? model.logo : '__PUBLIC__/images/img_none.png'" alt="model.name"></td>
+                        <td>{{model.phone}}</td>
+                        <td>{{model.email}}</td>
+                        <td>{{model.address}}</td>
+                        <td>{{model.postcode}}</td>
+                        <td>{{model.type}}</td>
+                        <td>{{model.level}}</td>
+                        <td>
+                            <a :href="'__PRO_PATH__/Hospital/info?id='+model.id" title="详情">
+                                <i class="fa fa-info-circle fa-lg" aria-hidden="true" style="margin-right: 10px;"></i>
+                            </a>
+                            <a :href="'__PRO_PATH__/Hospital/edit?id='+model.id" title="编辑">
+                                <i class="fa fa-pencil-square  fa-lg" aria-hidden="true" style="margin-right: 10px;"></i>
+                            </a>
+                            <a href="javascript:;" @click="remove([model.id])" title="删除">
+                                <i class="fa fa-trash  fa-lg" aria-hidden="true" style="margin-right: 0;"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </template>
+                <template v-else>
+                    <tr>
+                        <td colspan="11" class="nodata">暂无医院信息！</td>
+                    </tr>
+                </template>
+                </tbody>
+            </table>
+            {include file="Common/page" /}
+        </div>
+    </div>
+</div><!-- /main-container -->
+{include file="Common/bottom" /}
+{include file="Common/popup_warn" /}
+{include file="Common/popup_list" /}
+<script src="__PUBLIC__/js/datapicker/daterangepicker.js"></script>
+<script>
+    $('#consultation-nav-hospital').addClass('active');
+
+    var vm = new Vue({
+        el: '#hospital',
+        data: {
+            list: [],
+            params: {},
+            check_all: false,
+            select: [],
+            total: 0,
+            per_page: 10,
+            current_page: 1,
+            pages: 1,
+            fore_omit: false,
+            back_omit: false,
+            fore_pages: [],
+            mid_pages: [],
+            back_pages: [],
+            side: 3,
+            window: 6
+        },
+        mounted: function() {
+            $("#district").citySelect({prov:"不限",nodata:"none"});
+        },
+        updated: function () {
+            this.fore_pages = [];
+            this.mid_pages = [];
+            this.back_pages = [];
+            if(this.pages < this.window + 6){
+                this.fore_omit = false;
+                this.back_omit = false;
+                for(var i=1; i<=this.pages; i++){
+                    this.fore_pages.push(i);
+                }
+            }
+            else if(this.current_page <= this.window){
+                this.fore_omit = false;
+                this.back_omit = true;
+                for(var i=1; i<= this.window + 2; i++){
+                    this.fore_pages.push(i);
+                }
+                this.back_pages = [this.pages - 1, this.pages];
+            }
+            else if(this.current_page > this.pages - this.window){
+                this.fore_omit = true;
+                this.back_omit = false;
+                for(var i=this.pages-(this.window+2); i<= this.pages; i++){
+                    this.back_pages.push(i);
+                }
+                this.fore_pages = [1, 2];
+            }
+            else{
+                this.fore_omit = true;
+                this.back_omit = true;
+                this.fore_pages = [1, 2];
+                for(var i=parseInt(this.current_page) - parseInt(this.side);
+                    i <= parseInt(this.current_page) + parseInt(this.side); i++){
+                    this.mid_pages.push(i);
+                }
+                this.back_pages = [this.pages - 1, this.pages];
+            }
+        },
+        methods:{
+            resetParams: function () {
+                this.select = [];
+                this.check_all = false;
+            },
+            // 转到某页
+            gotoPage: function (page) {
+                if(page == this.current_page) return;
+                this.current_page = page;
+                submit();
+            },
+            selectClick: function (id) {
+                if(this.select.indexOf(id) == -1){
+                    this.select.push(id);
+                }
+                else{
+                    this.select.remove(id);
+                }
+                if(this.list.length == this.select.length){
+                    this.check_all = true;
+                } else {
+                    this.check_all = false;
+                }
+            },
+            checkAll: function () {
+                if(!this.check_all){
+                    for(var i=0;i<this.list.length;i++){
+                        var id = this.list[i]['id'];
+                        if(this.select.indexOf(id) == -1){
+                            this.select.push(id);
+                        }
+                    }
+                } else {
+                    this.select = [];
+                }
+                this.check_all = !this.check_all;
+            },
+            create: function () {
+                window.location.href = '__PRO_PATH__/Hospital/create';
+            },
+
+            remove: function (id) {
+                var ids = [];
+                if(id.length==0){
+                    ids = this.select;
+                }
+                else{
+                    if(this.select.indexOf(id[0]) == -1){
+                        this.select.push(id[0]);
+                    }
+                    ids = id;
+                }
+                this.select = ids;
+                // 删除
+                popupList({
+                    remove: '__PRO_PATH__/Hospital/remove',
+                    ids: vm.select
+                }, function () {
+                    submit();
+                });
+                $('#confirm-popup').popup('show');
+            }
+        },
+        filters:{
+            moment: function (value, formatString) {
+                formatString = formatString || 'YYYY-MM-DD HH:mm';
+                return new Date(parseInt(value) * 1000).toLocaleString().replace(/年|月/g, "-").replace(/日/g, " ");
+            },
+            getHospitalStatus: function (value) {
+                var ret = "";
+                if(value==1){
+                    ret = "待处理";
+                }
+                if(value==2){
+                    ret = "待会诊";
+                }
+                if(value==3){
+                    ret = "已会诊";
+                }
+                if(value==4){
+                    ret = "已结束";
+                }
+                return ret;
+            },
+            getHospitalType: function (value) {
+                var ret = '';
+                if(value == 1){
+                    ret = '一般';
+                }
+                if(value == 2){
+                    ret = '紧急';
+                }
+                return ret;
+            },
+            getChargeStatus: function (value) {
+                var ret = '';
+                if(value == 0){
+                    ret = '未缴费';
+                }
+                if(value == 1){
+                    ret = '已缴费';
+                }
+                return ret;
+            },
+            formatText: function (text, len) {
+                return cutString(text, len);
+            }
+        }
+    });
+
+    submit();
+
+    // 异步提交数据
+    function submit() {
+        getParams();
+        vm.resetParams();
+        $.post('__PRO_PATH__/Hospital/getHospitalList', vm.params, function (res) {
+            if (res['error_code'] == 0) {
+                vm.total = res.total;
+                vm.pages = Math.ceil(res.total / vm.per_page);
+                vm.current_page = res.current_page;
+                vm.list = res.data;
+                console.log(JSON.stringify(vm.list));
+            }
+        });
+    }
+
+    // 获取参数设置
+    function getParams() {
+        var data = $('#main-form').serializeArray();
+        $.each(data, function () {
+            vm.params[this.name] = this.value;
+        });
+        vm.params['per_page'] = vm.per_page;
+        vm.params['current_page'] = vm.current_page;
+    }
+
+</script>
+{else /}
+<div class="main-container">
+    <div class="padding-md">
+        <span class="col-lg-12" style="font-size: larger; text-align: center">
+			<strong>抱歉，您访问的页面不存在！</strong>
+		</span>
+    </div>
+</div>
+{include file="Common/bottom" /}
+{/if}

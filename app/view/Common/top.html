@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>眼科医联体远程诊疗平台</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+    [metas]
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="眼科医联体远程诊疗平台">
+    <meta name="author" content="yzs">
+
+    <!-- ionicons -->
+    <!--<link rel="shortcut icon" href="__PUBLIC__/__PUBLIC__/images/logo.ico" />-->
+    <!--<link rel="bookmark" href="__PUBLIC__/__PUBLIC__/images/logo.ico" />-->
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/js/bootstrap/css/bootstrap.min.css">
+
+    <!-- Font Awesome -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Slider -->
+    <link href="__PUBLIC__/css/bootstrap-slider.css" rel="stylesheet"/>
+
+    <!-- Tag Input -->
+    <link href="__PUBLIC__/css/jquery.tagsinput.css" rel="stylesheet">
+
+    <!-- Date Time Picker -->
+    <!--<link href="__PUBLIC__/css/datetimepicker.css" rel="stylesheet">-->
+
+    <!-- Select2 -->
+    <!--<link href="__PUBLIC__/css/select2/select2.css" rel="stylesheet"/>-->
+
+    <!-- Morris -->
+    <link href="__PUBLIC__/css/morris.css" rel="stylesheet"/>
+
+    <!-- Datepicker -->
+    <link href="__PUBLIC__/css/datepicker.css" rel="stylesheet"/>
+
+    <!-- Animate -->
+    <link href="__PUBLIC__/css/animate.min.css" rel="stylesheet">
+
+    <!-- Owl Carousel -->
+    <link href="__PUBLIC__/css/owl.carousel.min.css" rel="stylesheet">
+    <link href="__PUBLIC__/css/owl.theme.default.min.css" rel="stylesheet">
+
+    <!-- jQuery steps -->
+    <!--<link href="__PUBLIC__/css/jquery.steps.css" rel="stylesheet"/>-->
+
+    <!-- Gritter -->
+    <!--<link href="__PUBLIC__/css/gritter/jquery.gritter.css" rel="stylesheet">-->
+
+    <!-- Dropzone -->
+    <!--<link href="__PUBLIC__/css/dropzone/css/dropzone.css" rel="stylesheet">-->
+
+    <!-- Simplify -->
+    <link href="__PUBLIC__/css/simplify.min.css" rel="stylesheet">
+
+    <!-- DataRangePicker -->
+    <link href="__PUBLIC__/js/datapicker/daterangepicker.css" rel="stylesheet">
+
+    <!-- MyCss -->
+    <link href="__PUBLIC__/css/consultation.css" rel="stylesheet">
+    <link href="__PUBLIC__/js/multiple-select/multiple-select.css" rel="stylesheet">
+
+    <!-- labelauty -->
+    <link href="__PUBLIC__/js/labelauty/labelauty.css" rel="stylesheet">
+
+    <!-- switch -->
+    <link rel="stylesheet" href="__PUBLIC__/js/bootstrap-switch/css/bootstrapSwitch.css">
+
+    <!-- warnKeywords -->
+    <link rel="stylesheet" href="__PUBLIC__/css/warnKeywords.css">
+
+    <!-- img box -->
+    <link href="__PUBLIC__/css/jquery.lighter.css" type="text/css" rel="stylesheet" />
+
+    <!-- Jquery -->
+    <script src="__PUBLIC__/js/jquery.min.js"></script>
+
+    <!-- MyJs-->
+    <script src="__PUBLIC__/js/myJs/myChart.js"></script>
+
+    <!-- Vue -->
+    <script src="__PUBLIC__/js/vue.min.js"></script>
+</head>
+<body class="overflow-hidden">
+<div class="wrapper preload">
+    {include file="Common/sidebar_right" /}
+    <header class="top-nav">
+        <div class="top-nav-inner">
+            <!-- 小屏显示 -->
+            <div class="nav-header">
+                <button type="button" class="navbar-toggle pull-left sidebar-toggle" id="sidebarToggleSM">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <ul class="nav-notification pull-right">
+                    <li>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-lg"></i></a>
+                        <ul class="dropdown-menu dropdown-sm pull-right user-dropdown">
+                            <li class="user-avatar" id="user_small">
+                                <img :src="logo != '' ? logo : '__PUBLIC__/images/logo_default.png'" alt="" class="img-circle">
+                                <div class="user-content">
+                                    <h5 class="no-m-bottom">{{user}}</h5>
+                                    <div class="m-top-xs">
+                                        <a href="javascript:;" class="logout">安全退出</a>
+                                    </div>
+                                </div>
+                            </li>
+                            {if condition="authority('Account')"}
+                            <li>
+                                <a href="__PRO_PATH__/UserAdmin/account">
+                                    <i class="fa fa-user-circle-o fa-lg"></i>
+                                    <span class="m-left-xs">账户设置</span>
+                                </a>
+                            </li>
+                            {/if}
+
+                            {if condition="authority('Apply')"}
+                            <li>
+                                <a href="__PRO_PATH__/Apply/index">
+                                    <i class="fa fa-inbox fa-lg"></i>
+                                    <span class="m-left-xs">会诊申请</span>
+                                </a>
+                            </li>
+                            {/if}
+
+                            {if condition="authority('Inform')"}
+                            <li>
+                                <a href="__PRO_PATH__/Inform/index">
+                                    <i class="fa fa-bell fa-lg"></i>
+                                    <span class="m-left-xs">通知公告</span>
+                                </a>
+                            </li>
+                            {/if}
+
+                            {if condition="authority('OperationLog')"}
+                            <li>
+                                <a href="__PRO_PATH__/OperationLog/index">
+                                    <i class="fa fa-bookmark fa-lg"></i>
+                                    <span class="m-left-xs">操作日志</span>
+                                </a>
+                            </li>
+                            {/if}
+
+                            {if condition="authority('Chat')"}
+                            <li>
+                                <a href="__PRO_PATH__/Chat/index">
+                                    <i class="fa fa-comments fa-lg"></i>
+                                    <span class="m-left-xs">在线互动</span>
+                                </a>
+                            </li>
+                            {/if}
+                        </ul>
+                    </li>
+                </ul>
+
+                <a href="__PRO_PATH__/" class="brand">
+                    <i class="fa fa-database"></i><span class="brand-name">眼科医联体远程诊疗平台</span>
+                </a>
+            </div><!-- 小屏显示 -->
+
+            <!-- 大屏显示 -->
+            <div class="nav-container">
+                <button type="button" class="navbar-toggle pull-left sidebar-toggle" id="sidebarToggleLG">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <div class="pull-right m-right-sm">
+                    <div class="user-block hidden-xs">
+                        <a href="#" data-toggle="dropdown" id="user_big">
+                            <img :src="logo != '' ? logo : '__PUBLIC__/images/logo_default.png'" alt="" class="img-circle inline-block user-profile-pic">
+                            <div class="user-detail inline-block">
+                                {{user}}
+                                <i class="fa fa-angle-down"></i>
+                            </div>
+                        </a>
+                        <div class="panel border dropdown-menu user-panel">
+                            <div class="panel-body paddingTB-sm">
+                                <ul>
+                                    {if condition="authority('Account')"}
+                                    <li>
+                                        <a href="__PRO_PATH__/UserAdmin/account">
+                                            <i class="fa fa-user-circle-o fa-lg"></i>
+                                            <span class="m-left-xs">账户设置</span>
+                                        </a>
+                                    </li>
+                                    {/if}
+
+                                    {if condition="authority('Apply')"}
+                                    <li>
+                                        <a href="__PRO_PATH__/Apply/index">
+                                            <i class="fa fa-inbox fa-lg"></i>
+                                            <span class="m-left-xs">会诊申请</span>
+                                        </a>
+                                    </li>
+                                    {/if}
+
+                                    {if condition="authority('Inform')"}
+                                    <li>
+                                        <a href="__PRO_PATH__/Inform/index">
+                                            <i class="fa fa-bell fa-lg"></i>
+                                            <span class="m-left-xs">通知公告</span>
+                                        </a>
+                                    </li>
+                                    {/if}
+
+                                    {if condition="authority('OperationLog')"}
+                                    <li>
+                                        <a href="__PRO_PATH__/OperationLog/index">
+                                            <i class="fa fa-bookmark fa-lg"></i>
+                                            <span class="m-left-xs">操作日志</span>
+                                        </a>
+                                    </li>
+                                    {/if}
+
+                                    {if condition="authority('Chat')"}
+                                    <li>
+                                        <a href="__PRO_PATH__/Chat/index">
+                                            <i class="fa fa-comments fa-lg"></i>
+                                            <span class="m-left-xs">在线互动</span>
+                                        </a>
+                                    </li>
+                                    {/if}
+
+                                    {if condition="authority('ClearCache')"}
+                                    <li>
+                                        <a href="javascript:;" id="clearCache">清除缓存</a>
+                                    </li>
+                                    {/if}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 信息推送 -->
+                    <ul class="nav-notification">
+                        <li>
+                            <a href="javascript:;" class="logout" title="安全退出">
+                                <i class="fa fa-power-off fa-lg"></i>
+                            </a>
+                        </li>
+
+                        {include file="Common/nav_apply" }
+
+                        {include file="Common/nav_inform" }
+
+                        {if condition="authority('Chat')"}
+                        <li class="chat-notification">
+                            <a href="javascript:;" class="sidebarRight-toggle"><i class="fa fa-comments fa-lg"></i></a>
+                            <span class="badge badge-danger bounceIn"><span id="chat_count"></span></span>
+                        </li>
+                        {/if}
+                    </ul>
+                </div><!-- 大屏显示 -->
+            </div>
+        </div><!-- ./top-nav-inner -->
+
+    </header>
+    <aside class="sidebar-menu fixed">
+        <div class="sidebar-inner scrollable-sidebar">
+            <div class="main-menu">
+                <ul class="accordion">
+                    <li class="menu-header">
+                        DashBoard
+                    </li>
+                    <li class="bg-palette1" id="consultation-nav-dashborad">
+                        <a href="__PRO_PATH__/">
+                            <span class="menu-content block">
+                                <span class="menu-icon"><i class="block fa fa-home fa-lg"></i></span>
+                                <span class="text m-left-sm">平台概况</span>
+                            </span>
+                            <span class="menu-content-hover block">Home</span>
+                        </a>
+                    </li>
+
+                    {if condition="authority('Apply')"}
+                    <li class="bg-palette2" id="consultation-nav-apply">
+                        <a href="__PRO_PATH__/Apply/index">
+                            <span class="menu-content block">
+                                <span class="menu-icon"><i class="fa fa-envelope fa-lg"></i></span>
+								<span class="text m-left-sm">会诊申请</span>
+                            </span>
+                            <span class="menu-content-hover block">Apply</span>
+                        </a>
+                    </li>
+                    {/if}
+
+                    {if condition="authority('Channel')"}
+                    <li class="bg-palette3" id="consultation-nav-channel">
+                        <a href="__PRO_PATH__/Apply/channel">
+                            <span class="menu-content block">
+                                <span class="menu-icon"><i class="fa fa-sign-in fa-lg"></i></span>
+								<span class="text m-left-sm">绿色通道</span>
+                            </span>
+                            <span class="menu-content-hover block">Channel</span>
+                        </a>
+                    </li>
+                    {/if}
+
+                    {if condition="authority('Chat')"}
+                    <li class="bg-palette4" id="consultation-nav-chat">
+                        <a href="__PRO_PATH__/Chat/index">
+                            <span class="menu-content block">
+                                <span class="menu-icon"><i class="fa fa-comments fa-lg"></i></span>
+								<span class="text m-left-sm">在线互动</span>
+                            </span>
+                            <span class="menu-content-hover block">Chat</span>
+                        </a>
+                    </li>
+                    {/if}
+
+                    {if condition="authority('Inform')"}
+                    <li class="bg-palette2" id="consultation-nav-inform">
+                        <a href="__PRO_PATH__/Inform/index">
+                            <span class="menu-content block">
+                                <span class="menu-icon"><i class="fa fa-bell fa-lg"></i></span>
+								<span class="text m-left-sm">通知公告</span>
+                            </span>
+                            <span class="menu-content-hover block">Inform</span>
+                        </a>
+                    </li>
+                    {/if}
+
+                    {if condition="authority('OperationLog')"}
+                    <li class="bg-palette3" id="consultation-nav-log">
+                        <a href="__PRO_PATH__/OperationLog/index">
+                            <span class="menu-content block">
+                                <span class="menu-icon"><i class="fa fa-bookmark-o fa-lg"></i></span>
+								<span class="text m-left-sm">操作日志</span>
+                            </span>
+                            <span class="menu-content-hover block">Log</span>
+                        </a>
+                    </li>
+                    {/if}
+
+                    {if condition="authority('Account')"}
+                    <li class="bg-palette4" id="consultation-nav-account">
+                        <a href="__PRO_PATH__/UserAdmin/account">
+                            <span class="menu-content block">
+                                <span class="menu-icon"><i class="fa fa-user-circle-o fa-lg"></i></span>
+								<span class="text m-left-sm">账户信息</span>
+                            </span>
+                            <span class="menu-content-hover block">Account</span>
+                        </a>
+                    </li>
+                    {/if}
+
+                    {if condition="authority('Hospital')"}
+                    <li class="bg-palette2" id="consultation-nav-hospital">
+                        <a href="__PRO_PATH__/Hospital/index">
+                            <span class="menu-content block">
+                                <span class="menu-icon"><i class="fa fa-hospital-o fa-lg"></i></span>
+								<span class="text m-left-sm">医院信息</span>
+                            </span>
+                            <span class="menu-content-hover block">Hospital</span>
+                        </a>
+                    </li>
+                    {/if}
+
+                    {if condition="authority('Doctor')"}
+                    <li class="bg-palette3" id="consultation-nav-doctor">
+                        <a href="__PRO_PATH__/Doctor/index">
+                            <span class="menu-content block">
+                                <span class="menu-icon"><i class="fa fa-user-md fa-lg"></i></span>
+								<span class="text m-left-sm">医生信息</span>
+                            </span>
+                            <span class="menu-content-hover block">Doctor</span>
+                        </a>
+                    </li>
+                    {/if}
+
+                    {if condition="authority('Patient')"}
+                    <li class="bg-palette4" id="consultation-nav-patient">
+                        <a href="__PRO_PATH__/Patient/index">
+                            <span class="menu-content block">
+                                <span class="menu-icon"><i class="fa fa-male fa-lg"></i></span>
+								<span class="text m-left-sm">患者信息</span>
+                            </span>
+                            <span class="menu-content-hover block">Patient</span>
+                        </a>
+                    </li>
+                    {/if}
+
+                    {if condition="authority('Setting')"}
+                    <li class="openable bg-palette1" id="consultation-nav-setting">
+                        <a href="javascript:;">
+                            <span class="menu-content block">
+                                <span class="menu-icon"><i class="block fa fa-cog fa-lg"></i></span>
+								<span class="text m-left-sm">系统设置</span>
+                                <span class="submenu-icon"></span>
+                            </span>
+                            <span class="menu-content-hover block">Setting</span>
+                        </a>
+                        <ul class="submenu bg-palette4">
+                            {if condition="authority('Authority')"}
+                            <li id="consultation-nav-setting-sub1">
+                                <a href="__PRO_PATH__/Action/index">
+                                    <span class="submenu-label">权限设置</span>
+                                </a>
+                            </li>
+                            {/if}
+                            {if condition="authority('User')"}
+                            <li id="consultation-nav-setting-sub2">
+                                <a href="__PRO_PATH__/UserAdmin/index">
+                                    <span class="submenu-label">用户设置</span>
+                                </a>
+                            </li>
+                            {/if}
+                            {if condition="authority('Role')"}
+                            <li id="consultation-nav-setting-sub3">
+                                <a href="__PRO_PATH__/Role/index">
+                                    <span class="submenu-label">角色设置</span>
+                                </a>
+                            </li>
+                            {/if}
+                        </ul>
+                    </li>
+                    {/if}
+                </ul>
+            </div>
+        </div><!-- sidebar-inner -->
+    </aside>

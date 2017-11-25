@@ -1,0 +1,232 @@
+{include file="Common/top" title="首页" metas='' /}
+
+<style>
+    .index-wel-wrapper{
+        width:350px;
+        margin:200px auto;
+    }
+    .index-wel{
+        width:100px;
+        height:100px;
+        border-radius:200px;
+        border:1px solid gray;
+        float:left;
+        font-size:60px;
+        line-height:100px;
+        text-align:center;
+    }
+    .index-wel-r{
+        margin-left:150px;
+    }
+</style>
+<div class="main-container">
+    <div class="padding-md">
+        <div class="index-wel-wrapper">
+            <div class="index-wel index-wel-l">欢</div>
+            <div class="index-wel index-wel-r">迎</div>
+        </div>
+    </div>
+</div><!-- /main-container -->
+
+<!--<style>-->
+    <!--.unit{-->
+        <!--font-size: 25%;-->
+    <!--}-->
+<!--</style>-->
+
+<!--<div class="main-container" style="display: none">-->
+    <!--<div class="padding-md">-->
+        <!--&lt;!&ndash; 总览 &ndash;&gt;-->
+        <!--<div class="row m-top-md">-->
+            <!--<div class="col-lg-2 col-sm-2">-->
+                <!--<div class="statistic-box bg-success m-bottom-md" style="background-color: #1b6d85">-->
+                    <!--<div class="statistic-title"><a style="color: white" href="__PRO_PATH__/DataMonitor/index">文章总数</a></div>-->
+                    <!--<div class="statistic-value">7798<span class="unit"></span></div>-->
+                    <!--<div class="statistic-icon-background">-->
+                        <!--<i class="ion-eye"></i>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="col-lg-2 col-sm-2">-->
+                <!--<div class="statistic-box bg-success m-bottom-md">-->
+                    <!--<div class="statistic-title"><a style="color: white" href="__PRO_PATH__/DataMonitor/index">正面舆情</a></div>-->
+                    <!--<div class="statistic-value">7621<span class="unit"></span></div>-->
+                    <!--<div class="statistic-icon-background">-->
+                        <!--<i class="ion-eye"></i>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="col-lg-2 col-sm-2">-->
+                <!--<div class="statistic-box bg-danger m-bottom-md">-->
+                    <!--<div class="statistic-title"><a style="color: white" href="__PRO_PATH__/Company/index">负面舆情</a></div>-->
+                    <!--<div class="statistic-value">177<span class="unit"></span></div>-->
+                    <!--<div class="statistic-icon-background">-->
+                        <!--<i class="ion-stats-bars"></i>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="col-lg-2 col-sm-2">-->
+                <!--<div class="statistic-box bg-info m-bottom-md">-->
+                    <!--<div class="statistic-title"><a style="color: white" href="__PRO_PATH__/Theme/index">舆情跟踪</a></div>-->
+                    <!--<div class="statistic-value">20<span class="unit"></span></div>-->
+                    <!--<div class="statistic-icon-background">-->
+                        <!--<i class="ion-person-add"></i>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="col-lg-2 col-sm-2">-->
+                <!--<div class="statistic-box bg-purple m-bottom-md">-->
+                    <!--<div class="statistic-title"><a style="color: white" href="__PRO_PATH__/Media/index">今日预警</a></div>-->
+                    <!--<div class="statistic-value">0<span class="unit"></span></div>-->
+                    <!--<div class="statistic-icon-background">-->
+                        <!--<i class="ion-ios7-cart-outline"></i>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="col-lg-2 col-sm-2">-->
+                <!--<div class="statistic-box bg-success m-bottom-md" style="background-color: #00AA88">-->
+                    <!--<div class="statistic-title"><a style="color: white" href="__PRO_PATH__/Media/index">舆情级别</a></div>-->
+                    <!--<div class="statistic-value"><span style="font-size: 25px">一般</span></div>-->
+                    <!--<div class="statistic-icon-background">-->
+                        <!--<i class="ion-ios7-cart-outline"></i>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>&lt;!&ndash; /main-container &ndash;&gt;-->
+{include file="Common/bottom"/}
+
+<script>
+    $('#consultation-nav-dashborad').addClass('active');
+
+    //Flot Chart (Total Sales)
+    var d1 = [];
+    for (var i = 0; i <= 10; i += 1) {
+        //d1.push([i, parseInt(Math.random() * 30)]);
+        d1 = [[0,700],[1,1200],[2,1100],[3,900],[4,500],[5,700],[6,500],[7,600],[8,1200],[9,1700],[10,1200]];
+    }
+
+    function plotWithOptions() {
+        $.plot("#placeholder", [d1], {
+            series: {
+                lines: {
+                    show: true,
+                    fill: true,
+                    fillColor: '#eee',
+                    steps: false,
+
+                },
+                points: {
+                    show: true,
+                    fill: false
+                }
+            },
+
+            grid: {
+                color: '#fff',
+                hoverable: true,
+                autoHighlight: true,
+            },
+            colors: [ '#bbb'],
+        });
+    }
+
+    $("<div id='tooltip'></div>").css({
+        position: "absolute",
+        display: "none",
+        border: "1px solid #222",
+        padding: "4px",
+        color: "#fff",
+        "border-radius": "4px",
+        "background-color": "rgb(0,0,0)",
+        opacity: 0.90
+    }).appendTo("body");
+
+    $("#placeholder").bind("plothover", function (event, pos, item) {
+
+        var str = "(" + pos.x.toFixed(2) + ", " + pos.y.toFixed(2) + ")";
+        $("#hoverdata").text(str);
+
+        if (item) {
+            var x = item.datapoint[0],
+                    y = item.datapoint[1];
+
+            $("#tooltip").html("Total Sales : " + y)
+                    .css({top: item.pageY+5, left: item.pageX+5})
+                    .fadeIn(200);
+        } else {
+            $("#tooltip").hide();
+        }
+    });
+
+    //plotWithOptions();
+
+    //Morris Chart (Total Visits)
+//    var totalVisitChart = Morris.Bar({
+//        element: 'totalSalesChart',
+//        data: [
+//            { y: '2008', a: 100, b: 90 },
+//            { y: '2009', a: 75,  b: 65 },
+//            { y: '2010', a: 50,  b: 40 },
+//            { y: '2011', a: 75,  b: 65 },
+//            { y: '2012', a: 50,  b: 40 },
+//            { y: '2013', a: 75,  b: 65 },
+//            { y: '2014', a: 100, b: 90 }
+//        ],
+//        xkey: 'y',
+//        ykeys: ['a', 'b'],
+//        labels: ['Total Visits', 'Bounce Rate'],
+//        barColors: ['#999', '#eee'],
+//        grid: false,
+//        gridTextColor: '#777',
+//    });
+
+//    $(function () {
+//        $('.chart').easyPieChart({
+//            easing: 'easeOutBounce',
+//            size: '140',
+//            lineWidth: '7',
+//            barColor: '#7266ba',
+//            onStep: function (from, to, percent) {
+//                $(this.el).find('.percent').text(Math.round(percent));
+//            }
+//        });
+//
+//        $('#bubble_num_limit').text(10);
+//        $('#theme_bubble_limit').text(10);
+//        getParams();
+//
+////        showThemeBubble(params);
+////        showCompanyBubble(params);
+//        showMedia();
+//        //showCompanyRankPie(params);
+//        $('.sortable-list').sortable();
+//
+//        $('.todo-checkbox').click(function () {
+//
+//            var _activeCheckbox = $(this).find('input[type="checkbox"]');
+//
+//            if (_activeCheckbox.is(':checked')) {
+//                $(this).parent().addClass('selected');
+//            }
+//            else {
+//                $(this).parent().removeClass('selected');
+//            }
+//
+//        });
+//
+//        //Delete Widget Confirmation
+//        $('#deleteWidgetConfirm').popup({
+//            vertical: 'top',
+//            pagecontainer: '.container',
+//            transition: 'all 0.3s'
+//        });
+//    });
+</script>
+<script src="__PUBLIC__/js/simplify/simplify_dashboard.js"></script>

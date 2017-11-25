@@ -1,0 +1,292 @@
+{include file="Common/top" title="首页" metas='' /}
+{if condition="authority('ChannelCreate')"}
+<script src="__PUBLIC__/js/multiple-select/multiple-select.js"></script>
+<style>
+    .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+        padding: 8px;
+        text-align: center;
+        line-height: 1.42857143;
+        vertical-align: middle;
+        border:1.0pt solid black;
+        width: 10%;
+        color: black;
+        font-weight: 500;
+    }
+    .form-group {
+        margin-bottom: 0;
+    }
+</style>
+<div class="main-container">
+    <div class="padding-md">
+        <ul class="breadcrumb">
+            <li><span class="primary-font"><i class="icon-home"></i></span><a href="__PRO_PATH__/">首页</a></li>
+            <li><span class="primary-font"><i class="icon-home"></i></span><a href="__PRO_PATH__/Apply/channel">绿色通道</a></li>
+            <li>新建申请</li>
+        </ul>
+        <div class="col-lg-12" style="background-color: #FFF; padding: 30px 10px" id="apply-create">
+            <a class="btn btn-info" style="margin: 5px 0" href="__PRO_PATH__/Apply/channel">返回</a>
+            {include file="Apply/apply_form_create" /}
+            <div class="form-group">
+                <div class="col-sm-offset-5 col-sm-10 lab-btns">
+                    <div class="col-sm-4">
+                        <a class="btn btn-success" id="apply-form-create-save" @click="createNewApply">申请</a>
+                        <a id="form-cancel" class="btn btn-info"  href="__PRO_PATH__/Apply/channel">取消</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div><!-- /main-container -->
+{include file="Common/progress"}
+{include file="Common/bottom" /}
+{include file="Common/calendar" /}
+{include file="Common/popup_warn" /}
+{include file="Common/popup_list" /}
+{include file="Common/calendar" /}
+{include file="Common/upload"}
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/js/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/js/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/js/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script>
+    $('#consultation-nav-channel').addClass('active');
+
+    var vm = new Vue({
+        el: '#apply-create',
+        data: {
+            apply_info: {},
+            patient_info: {},
+            source_hospital_info: {},
+            source_doctor_info: {},
+            target_hospital_info: {},
+            target_office_info: [],
+            target_doctor_info: [],
+            reply: {
+                status: '',
+                consultation_result: '',
+                update_time_str: '',
+                price: 0
+            },
+            errors:{
+                doctor_phone:'',
+                ID_number:'',
+                name:'',
+                age:'',
+                gender:'',
+                ill_state:'',
+                ill_type:'',
+                other_ill_type:'',
+                apply_project:'',
+                other_apply_project: '',
+                phone:'',
+                apply_date:'',
+                target_office_id:'',
+                consultation_goal:'',
+                diagnose_state: ''
+            },
+            params: {},
+            patient:{
+                id: '',
+                ID_number: '',
+                name: '',
+                gender:'',
+                age:'',
+                phone:'',
+                ill_type:'',
+                other_ill_type:'',
+                vision_left:'',
+                vision_right:'',
+                pressure_left:'',
+                pressure_right:'',
+                exam_img: '',
+                exam_img_origin: '',
+                eye_photo_left: '',
+                eye_photo_left_origin: '',
+                eye_photo_right: '',
+                eye_photo_right_origin: '',
+                files_path: '',
+                files_path_origin: '',
+                ill_state:'',
+                diagnose_state: ''
+            },
+            seen:{
+                ill_type: false,
+                apply_project:false
+            }
+
+        },
+        mounted:function () {
+            $(".flatpickr").flatpickr({
+                time_24hr:true,
+                readonly: false
+            });
+            $(".multiple").multipleSelect({
+                filter: true,
+                multiple: true,
+                selectAll: true
+            });
+            myupload({
+                container: 'upload_file_path',
+                browse: 'pickfiles',
+                url: '__PRO_PATH__/Media/upload?dir=member',
+                img_types: 'jpg,gif,png',
+                zip_types: 'zip',
+                filelist: 'filelist',
+                uploadfiles: 'uploadfiles',
+                file_size: '10mb',
+                onUploaded: function (up, file, result) {
+                    var res = JSON.parse(result.response);
+                    vm.patient['files_path'] = res.result.file;
+                    vm.patient['files_path_origin'] = file.name;
+                },
+                isMulti: false
+            });
+            changeLogo({
+                container: 'upload_exam_img',
+                browse: 'pickfiles_exam_img',
+                url: '__PRO_PATH__/Media/upload?dir=import',
+                img_types: 'jpg,gif,png',
+                zip_types: 'zip',
+                file_size: '10mb',
+                onUploaded: function (up, file, result) {
+                    var res = JSON.parse(result.response);
+                    vm.patient['exam_img'] = res.result.file;
+                    vm.patient['exam_img_origin'] = file.name;
+                    chageTitle('上传成功');
+                    setTimeout("cancel()", 1000);
+                },
+                isMulti: false
+            });
+            changeLogo({
+                container: 'upload_left_eye',
+                browse: 'pickfiles_left_eye',
+                url: '__PRO_PATH__/Media/upload?dir=import',
+                img_types: 'jpg,gif,png',
+                zip_types: 'zip',
+                file_size: '10mb',
+                onUploaded: function (up, file, result) {
+                    var res = JSON.parse(result.response);
+                    vm.patient['eye_photo_left'] = res.result.file;
+                    vm.patient['eye_photo_left_origin'] = file.name;
+                    chageTitle('上传成功');
+                    setTimeout("cancel()", 1000);
+                },
+                isMulti: false
+            });
+            changeLogo({
+                container: 'upload_right_eye',
+                browse: 'pickfiles_right_eye',
+                url: '__PRO_PATH__/Media/upload?dir=import',
+                img_types: 'jpg,gif,png',
+                zip_types: 'zip',
+                file_size: '10mb',
+                onUploaded: function (up, file, result) {
+                    var res = JSON.parse(result.response);
+                    vm.patient['eye_photo_right'] = res.result.file;
+                    vm.patient['eye_photo_right_origin'] = file.name;
+                    chageTitle('上传成功');
+                    setTimeout("cancel()", 1000);
+                },
+                isMulti: false
+            });
+        },
+        methods:{
+            resetError: function () {
+                $.each(vm.errors, function (k, v) {
+                    vm.errors[k] = '';
+                });
+            },
+
+            createNewApply: function () {
+                getParams();
+                $.post('__PRO_PATH__/Apply/create', vm.params, function (res) {
+                    if (res.error_code == 0) {
+                        $.each(vm.errors, function (k) {
+                            vm.errors[k] = '';
+                        });
+                        popWarn('新建成功', '__PRO_PATH__/Apply/channel');
+                    } else if (res.error_code == 1) {
+                        $.each(vm.errors, function (k) {
+                            vm.errors[k] = '';
+                        });
+                        $.each(res.errors, function (k, v) {
+                            vm.errors[k] = v;
+                        });
+                        console.log(JSON.stringify(vm.errors));
+                    }
+                });
+            },
+
+            check_by_ID_number:function(){
+                $.post('__PRO_PATH__/Patient/getPatientByIDNum', {'ID_number': vm.patient['ID_number']}, function (res) {
+                    if (res.error_code == 0) {
+                        $.each(res.patient, function (k, v) {
+                            vm.patient[k] = v;
+                        });
+                        vm.seen.ill_type = vm.patient['ill_type'] == 5;
+                        vm.resetError();
+                    } else {
+                        popWarn('未找到这名患者的信息 ,请手动输入');
+                        $.each(vm.patient, function (k, v) {
+                            if(k != 'ID_number'){
+                                vm.patient[k] = '';
+                            }
+                        });
+                        vm.seen.ill_type = false;
+                    }
+                });
+            }
+        }
+    });
+
+    function change_eyes_ill_type(value) {
+        if(value == 5){
+            vm.seen['ill_type'] = !vm.seen['ill_type'];
+        } else{
+            vm.seen['ill_type'] = false;
+        }
+    }
+
+    function change_apply_project(value) {
+        if(value == 4){
+            vm.seen['apply_project'] = !vm.seen['apply_project'];
+        } else{
+            vm.seen['apply_project'] = false;
+        }
+    }
+
+    function change_hospital(){
+        var hospital_id = $('#hospital').val();
+        console.log(hospital_id);
+        $.post('__PRO_PATH__/Hospital/getHospitalById', {'id':hospital_id }, function (res) {});
+    }
+
+    function getParams(){
+        vm.params['office_ids'] = [];
+        vm.params['doctor_ids'] = [];
+        var data = $('#apply-form-create').serializeArray();
+        $.each(data, function() {
+            if(this.name == 'office_ids' || this.name == 'doctor_ids'){
+                vm.params[this.name].push(this.value);
+            } else {
+                vm.params[this.name] = this.value;
+            }
+        });
+        vm.params['is_green_channel'] = 1;
+        vm.params['patient'] = {};
+        $.each(vm.patient, function (k, v) {
+            vm.params['patient'][k] = v;
+        });
+        console.log(JSON.stringify(data));
+        console.log(JSON.stringify(vm.params));
+    }
+</script>
+{else /}
+<div class="main-container">
+    <div class="padding-md">
+        <span class="col-lg-12" style="font-size: larger; text-align: center">
+			<strong>抱歉，您访问的页面不存在！</strong>
+		</span>
+    </div>
+</div>
+{include file="Common/bottom" /}
+{/if}

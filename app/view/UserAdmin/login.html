@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>眼科医联体远程诊疗平台</title>
+    <!--<link rel="shortcut icon" href="__PUBLIC__/images/logo.ico"/>-->
+    <!--<link rel="bookmark" href="__PUBLIC__/images/logo.ico"/>-->
+    <link href="__PUBLIC__/js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/jquery.min.js"></script>
+    <script src='__PUBLIC__/js/jquery.popupoverlay.min.js'></script>
+    <!-- Vue -->
+    <script src="__PUBLIC__/js/vue.min.js"></script>
+    <link href="__PUBLIC__/css/simplify.min.css" rel="stylesheet">
+    <style>
+        .syh_bg {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: -1;
+        }
+
+        .syh_main {
+            width: 380px;
+            height: 380px;
+            margin: 180px auto;
+        }
+
+        #captcha{
+            width: 50%;
+            border-radius: 4px;
+            -moz-border-radius: 4px;
+            -webkit-border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+<div class="syh_main" id="login">
+    <form action="" method="post" id="main-form">
+        <div class="form-group">
+            <h3 style="text-align: center">眼科医联体远程诊疗平台</h3>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-addon"><span class="glyphicon glyphicon-user"></span></div>
+                <input class="form-control input-lg" type="text" placeholder="账号" name="username" @keyup.13="show($event)"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></div>
+                <input class="form-control input-lg" type="password" placeholder="密码" name="pass" @keyup.13="show($event)"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div>
+                <input style="width: 50%" class="form-control input-lg col-lg-10" type="text" name="code" placeholder="请输入验证码">
+                <img id="captcha" src="{:captcha_src()}" alt="captcha" onClick="this.src='{:captcha_src()}?'+Math.random();" />
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary btn-lg btn-block" id="login-btn">登录</button>
+        </div>
+
+        <div class="font-12 text-right m-bottom-xs">
+            <a href="javascript:;" title="请联系管理员" class="contact">忘记密码</a>
+        </div>
+    </form>
+</div>
+
+{include file="Common/popup_warn" /}
+<script>
+        var vm = new Vue({
+            el: '#login',
+            data:{
+
+            },
+            methods:{
+                show:function(ev){
+                    if(ev.keyCode == 13){
+                        submit();
+                    }
+                }
+            },
+        });
+
+
+        $('#login-btn').on('click', function () {
+            submit();
+        });
+
+        function submit() {
+            var username = $('input[name="username"]').val();
+            var pass = $('input[name="pass"]').val();
+            var code = $('input[name="code"]').val();
+            if (!username) {
+                popWarn('用户名不能为空', '');
+                return;
+            }
+            if (!pass) {
+                popWarn('密码不能为空', '');
+                return;
+            }
+            $.post('', {username: username, pass: pass, code: code}, function (res) {
+                if (res.error_code == 0) {
+                    window.location.href = '__PRO_PATH__/';
+                } else {
+                    popWarn(res.msg);
+                }
+            });
+        }
+
+        $('.contact').on('click', function () {
+            popWarn('请联系管理员：Admin <br/><br/> 联系方式：1234567890');
+        });
+    </script>
+
+</body>
+</html>

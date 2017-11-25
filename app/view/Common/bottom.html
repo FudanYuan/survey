@@ -1,0 +1,292 @@
+<footer class="footer">
+				<span class="footer-brand">
+					<strong class="text-danger" id="time">正在获取系统时间...</strong>
+				</span>
+    <p class="no-margin pull-right">
+        &copy; 2017 <strong>眼科医联体远程诊疗平台</strong>. ALL Rights Reserved.
+    </p>
+</footer>
+</div><!-- /wrapper -->
+
+<a href="javascript:;" class="scroll-to-top hidden-print"><i class="fa fa-chevron-up fa-lg"></i></a>
+</body>
+</html>
+<!-- Le javascript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+
+<!-- Bootstrap -->
+<script src="__PUBLIC__/js/bootstrap.min.js"></script>
+
+<!-- Flot -->
+<script src='__PUBLIC__/js/jquery.flot.min.js'></script>
+
+<!-- Slimscroll -->
+<script src='__PUBLIC__/js/jquery.slimscroll.min.js'></script>
+
+<!-- Morris -->
+<script src='__PUBLIC__/js/rapheal.min.js'></script>
+<script src='__PUBLIC__/js/morris.min.js'></script>
+
+<!-- Datepicker -->
+<script src='__PUBLIC__/js/uncompressed/datepicker.js'></script>
+
+<!-- Sparkline -->
+<script src='__PUBLIC__/js/sparkline.min.js'></script>
+
+<!-- Skycons -->
+<script src='__PUBLIC__/js/uncompressed/skycons.js'></script>
+
+<!-- Popup Overlay -->
+<script src='__PUBLIC__/js/jquery.popupoverlay.min.js'></script>
+
+<!-- Easy Pie Chart -->
+<script src='__PUBLIC__/js/jquery.easypiechart.min.js'></script>
+
+<!-- Sortable -->
+<script src='__PUBLIC__/js/uncompressed/jquery.sortable.js'></script>
+
+<!-- Owl Carousel -->
+<script src='__PUBLIC__/js/owl.carousel.min.js'></script>
+
+<!-- Modernizr -->
+<script src='__PUBLIC__/js/modernizr.min.js'></script>
+
+<!-- Echarts -->
+<script src="__PUBLIC__/js/Echarts/echarts.js"></script>
+
+<!-- Simplify -->
+<script src="__PUBLIC__/js/simplify/simplify.js"></script>
+<script src="__PUBLIC__/js/simplify/simplify_dashboard.js"></script>
+
+<!-- Moment -->
+<script src="__PUBLIC__/js/moment.js"></script>
+
+<!-- labelauty -->
+<script src="__PUBLIC__/js/labelauty/labelauty.js"></script>
+
+<!-- img box -->
+<script src="__PUBLIC__/js/jquery.lighter.js"></script>
+{include file="Common/popup_warn" /}
+<!-- show time -->
+<script>
+    //去除空格
+    String.prototype.Trim = function() {
+        return this.replace(/\s+/g, "");
+    };
+
+    //去除换行
+    function ClearBr(key) {
+        key = key.replace(/<\/?.+?>/g,"");
+        key = key.replace(/[\r\n]/g, "");
+        return key;
+    }
+
+    //去除左侧空格
+    function LTrim(str) {
+        return str.replace(/^\s*/g,"");
+    }
+
+    //去右空格
+    function RTrim(str) {
+        return str.replace(/\s*$/g,"");
+    }
+
+    //去掉字符串两端的空格
+    function trim(str) {
+        return str.replace(/(^\s*)|(\s*$)/g, "");
+    }
+
+    //去除字符串中间空格
+    function CTim(str) {
+        return str.replace(/\s/g,'');
+    }
+
+    //是否为由数字组成的字符串
+    function is_digitals(str) {
+        var reg=/^[0-9]*$/; //匹配整数
+        return reg.test(str);
+    }
+
+    function startTime() {
+        var today = new Date();//定义日期对象
+        var yyyy = today.getFullYear();//通过日期对象的getFullYear()方法返回年
+        var MM = today.getMonth() + 1;//通过日期对象的getMonth()方法返回年
+        var dd = today.getDate();//通过日期对象的getDate()方法返回年
+        var hh = today.getHours();//通过日期对象的getHours方法返回小时
+        var mm = today.getMinutes();//通过日期对象的getMinutes方法返回分钟
+        var ss = today.getSeconds();//通过日期对象的getSeconds方法返回秒
+        // 如果分钟或小时的值小于10，则在其值前加0，比如如果时间是下午3点20分9秒的话，则显示15：20：09
+        hh = checkTime(hh);
+        MM = checkTime(MM);
+        dd = checkTime(dd);
+        mm = checkTime(mm);
+        ss = checkTime(ss);
+        var day; //用于保存星期（getDay()方法得到星期编号）
+        if (today.getDay() == 0)   day = "星期日 ";
+        if (today.getDay() == 1)   day = "星期一 ";
+        if (today.getDay() == 2)   day = "星期二 ";
+        if (today.getDay() == 3)   day = "星期三 ";
+        if (today.getDay() == 4)   day = "星期四 ";
+        if (today.getDay() == 5)   day = "星期五 ";
+        if (today.getDay() == 6)   day = "星期六 ";
+        document.getElementById('time').innerHTML = hh + ":" + mm + ":" + ss + "  " + yyyy + "-" + MM + "-" + dd + " " + day;
+    }
+
+    function checkTime(i) {
+        if (i < 10) {
+            i = "0" + i;
+        }
+        return i;
+    }
+
+    setInterval(startTime, 1000);//每一秒中重新加载startTime()方法
+
+    function myMoment(value, formatString) {
+        formatString = formatString || 'YYYY-MM-DD HH:mm';
+        var time=new Date(parseInt(value) * 1000).format('yyyy年M月d日 hh:mm');
+        return time;
+    }
+
+    $('.logout').on('click', function () {
+        $.get('__PRO_PATH__/UserAdmin/dologout', {}, function (res) {
+            if (res.error_code == 0) {
+                window.location.href = '__PRO_PATH__/UserAdmin/login';
+            } else {
+                popWarn(res.msg);
+            }
+        });
+    });
+
+    $('#clearCache').on('click', function () {
+        $.get('__PRO_PATH__/Index/clearcache', function (res) {
+            if (res.error_code == 0) {
+                popWarn('清空缓存成功');
+            } else {
+                popWarn('清空缓存失败');
+            }
+        });
+    });
+
+    $('.contact').on('click', function () {
+        popWarn('请联系管理员：Jeremy <br/><br/> 联系方式：18508437068');
+    });
+
+    Array.prototype.remove = function (val) {
+        var index = this.indexOf(val);
+        if (index > -1) {
+            this.splice(index, 1);
+        }
+    };
+
+    /**
+     * 对Date的扩展，将 Date 转化为指定格式的String
+     * 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
+     * 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
+     * 例子：
+     * (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423
+     * (new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18
+     * @param fmt string
+     * @return string
+     * */
+    Date.prototype.format = function(fmt){ //author: meizz
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt))
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    };
+
+    /**参数说明：
+     * 根据长度截取先使用字符串，超长部分追加…
+     * str 对象字符串
+     * len 目标字节长度
+     * 返回值： 处理结果字符串
+     */
+    function cutString(str, len) {
+        //length属性读出来的汉字长度为1
+        if (str.length * 2 <= len) {
+            return str;
+        }
+        var strlen = 0;
+        var s = "";
+        for (var i = 0; i < str.length; i++) {
+            s = s + str.charAt(i);
+            if (str.charCodeAt(i) > 128) {
+                strlen = strlen + 2;
+                if (strlen >= len) {
+                    return s.substring(0, s.length - 1) + "...";
+                }
+            } else {
+                strlen = strlen + 1;
+                if (strlen >= len) {
+                    return s.substring(0, s.length - 2) + "...";
+                }
+            }
+        }
+        return s;
+    }
+
+    // 获得用户名称
+    var vm3 = new Vue({
+        el: '#user_big',
+        data: {
+            user: '',
+            logo: '',
+            user_id: ''
+        },
+        methods:{
+            getUser: function () {
+                $.post('__PRO_PATH__/UserAdmin/getUserName', {}, function (res) {
+                    if(res.error_code == 0){
+                        vm3.user = res.username;
+                        vm3.logo = res.logo;
+                        vm3.user_id = res.user_id;
+                    }
+                });
+            }
+        }
+    });
+    vm3.getUser();
+
+    var vm4 = new Vue({
+        el: '#user_small',
+        data: {
+            user: '',
+            logo: '',
+            user_id: ''
+        },
+        mounted: function () {
+            $('.logout').on('click', function () {
+                $.get('__PRO_PATH__/UserAdmin/dologout', {}, function (res) {
+                    if (res.error_code == 0) {
+                        window.location.href = '__PRO_PATH__/UserAdmin/login';
+                    } else {
+                        popWarn(res.msg);
+                    }
+                });
+            });
+        },
+        methods:{
+            getUser: function () {
+                $.post('__PRO_PATH__/UserAdmin/getUserName', {}, function (res) {
+                    if(res.error_code == 0){
+                        vm4.user = res.username;
+                        vm4.logo = res.logo;
+                        vm4.user_id = res.user_id;
+                    }
+                });
+            }
+        }
+    });
+    vm4.getUser();
+</script>

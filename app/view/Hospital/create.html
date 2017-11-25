@@ -1,0 +1,261 @@
+{include file="Common/top" title="首页" metas='' /}
+{if condition="authority('HospitalCreate')"}
+<script src="__PUBLIC__/js/multiple-select/multiple-select.js"></script>
+<div class="main-container">
+    <div class="padding-md">
+        <ul class="breadcrumb">
+            <li><span class="primary-font"><i class="icon-home"></i></span><a href="__PRO_PATH__/">首页</a></li>
+            <li><span class="primary-font"><i class="icon-home"></i></span><a href="__PRO_PATH__/Hospital/index">医院信息</a></li>
+            <li>新建医院</li>
+        </ul>
+
+        <div class="form-wrapper">
+            <form class="form-horizontal" method="post" id="new-apply-form">
+
+                <div :class="['form-group', errors.name != '' ? 'has-error' : '']" >
+                    <label for="name" class="col-sm-2 control-label">医院名称：</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" type="text" name="name" value="" placeholder="请输入医院全称" id="name">
+                        <p class="help-block">{{errors.name}}</p>
+                    </div>
+                </div>
+
+                <div :class="['form-group', errors.master != '' ? 'has-error' : '']" >
+                    <label for="master" class="col-sm-2 control-label">院长姓名：</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" type="text" name="master" value="" placeholder="请输入院长姓名" id="master">
+                        <p class="help-block">{{errors.master}}</p>
+                    </div>
+                </div>
+
+                <div class="form-group }">
+                    <label class="col-sm-2 control-label">医院logo：</label>
+                    <div class="col-sm-4">
+                        <img id="logo" style="max-height: 80px;max-width: 80px; display: none" src="{$Hospital.logo?? ''}">
+                        <br/>
+                        <div id="upload_logo">
+                            <a id="upload_logo_logo" href="javascript:;" style="position: relative;z-index: 1; top: -10px;">
+                                <i class="fa fa-camera fa-lg"></i>
+                            </a>
+                        </div>
+                        <input type="hidden" name="logo" />
+                    </div>
+                </div>
+
+                <div :class="['form-group', errors.phone != '' ? 'has-error' : '']">
+                    <label for="phone" class="col-sm-2 control-label">联系方式：</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" type="text" name="phone" value="" placeholder="请输入医院联系方式" id="phone">
+                        <p class="help-block">{{errors.phone}}</p>
+                    </div>
+                </div>
+
+                <div :class="['form-group']" >
+                    <label for="url" class="col-sm-2 control-label">医院网站：</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" type="text" name="url" value="" placeholder="请输入医院网站" id="url">
+                    </div>
+                </div>
+
+                <div :class="['form-group', errors.email != '' ? 'has-error' : '']" >
+                    <label for="email" class="col-sm-2 control-label">医院邮箱：</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" type="text" name="email" value="" placeholder="请输入医院邮箱" id="email">
+                        <p class="help-block">{{errors.email}}</p>
+                    </div>
+                </div>
+
+                <div :class="['form-group', errors.address != '' ? 'has-error' : '']" >
+                    <label for="address" class="col-sm-2 control-label">医院地址：</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" type="text" name="address" value="" placeholder="请输入医院地址" id="address">
+                        <p class="help-block">{{errors.address}}</p>
+                    </div>
+                </div>
+
+                <div :class="['form-group']" >
+                    <label for="postcode" class="col-sm-2 control-label">医院邮编：</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" type="text" name="postcode" value="" placeholder="请输入医院邮编" id="postcode">
+                    </div>
+                </div>
+
+                <div :class="['form-group', errors.type != '' ? 'has-error' : '']" >
+                    <label for="type" class="col-sm-2 control-label">医院类型：</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" type="text" name="type" value="" placeholder="比如：‘综合类’" id="type">
+                        <p class="help-block">{{errors.type}}</p>
+                    </div>
+                </div>
+
+                <div :class="['form-group', errors.level != '' ? 'has-error' : '']">
+                    <label for="level" class="col-sm-2 control-label">医院等级：</label>
+                    <div class="col-sm-4">
+                        <input class="form-control" type="text" name="level" value="" placeholder="比如：‘三级甲等’" id="level">
+                        <p class="help-block">{{errors.level}}</p>
+                    </div>
+                </div>
+
+                <div :class="['form-group']" >
+                    <label for="info" class="col-sm-2 control-label">医院信息：</label>
+                    <div class="col-sm-4">
+                        <textarea class="form-control" type="text" name="info" value="" placeholder="请输入医院详细信息" id="info"></textarea>
+                    </div>
+                </div>
+
+                <div :class="['form-group']" >
+                    <label for="honor" class="col-sm-2 control-label">所获荣誉：</label>
+                    <div class="col-sm-4">
+                        <textarea class="form-control" type="text" name="honor" value="" placeholder="请输入所获荣誉奖项" id="honor"></textarea>
+                    </div>
+                </div>
+
+                <div :class="['form-group']" >
+                    <label for="role" class="col-sm-2 control-label">医院角色：</label>
+                    <div class="col-sm-4">
+                        <select name="role" class="form-control"  id="role">
+                            <option value="不可会诊医院">不可会诊医院</option>
+                            <option value="可会诊医院">可会诊医院</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10 lab-btns">
+                        <a class="btn btn-success" id="new-apply-form-save" @click="createNewApply">提交</a>
+                        <a id="form-cancel" class="btn btn-info">取消</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div><!-- /main-container -->
+{include file="Common/progress"}
+{include file="Common/calendar" /}
+{include file="Common/popup_warn" /}
+{include file="Common/popup_list" /}
+{include file="Common/calendar" /}
+{include file="Common/bottom" /}
+{include file="Common/upload"}
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/js/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/js/ueditor/ueditor.all.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="__PUBLIC__/js/ueditor/lang/zh-cn/zh-cn.js"></script>
+<script>
+    $('#consultation-nav-hospital').addClass('active');
+    $(".flatpickr").flatpickr({time_24hr:true});
+
+    function clickRadio(value)
+    {
+        if(value == 5){
+            vm.seen['ill_type'] = !vm.seen['ill_type'];
+        } else{
+            vm.seen['ill_type'] = false;
+        }
+    }
+
+    var vm = new Vue({
+        el: '#new-apply-form',
+        data: {
+            params: {},
+            seen:{
+                ill_type: false
+            },
+            errors:{
+                email:'',
+                address:'',
+                name:'',
+                master:'',
+                level:'',
+                phone:'',
+                type:''
+            }
+        },
+
+        mounted:function () {
+            $(".multiple").multipleSelect({
+                filter: true,
+                multiple: true,
+                selectAll: true
+            });
+            changeLogo({
+                container: 'upload_logo',
+                browse: 'upload_logo_logo',
+                url: '__PRO_PATH__/Media/upload?dir=import',
+                img_types: 'jpg,gif,png',
+                zip_types: 'zip',
+                filelist: 'filelist_hospital_logo',
+                uploadfiles: 'uploadfiles_hospital_logo',
+                file_size: '10mb',
+                onUploaded: function (up, file, result) {
+                    var res = JSON.parse(result.response);
+                    $('#logo').attr('src',res.result.file);
+                    $('#logo').show();
+                    $("input[name='logo']").val(res.result.file);
+                    chageTitle('上传成功');
+                    setTimeout("cancel()", 1000);
+                },
+                isMulti: true
+            });
+        },
+
+        methods: {
+            createNewApply: function () {
+                getParams();
+                $.post('__PRO_PATH__/Hospital/create', vm.params, function (res) {
+                    if (res.error_code == 0) {
+                        $.each(vm.errors, function (k) {
+                            vm.errors[k] = '';
+                        });
+                        popWarn('新建成功','__PRO_PATH__/Hospital/index');
+                    } else if (res.error_code == 1) {
+                        $.each(vm.errors, function (k) {
+                            vm.errors[k] = '';
+                        });
+                        $.each(res.errors, function (k, v) {
+                            vm.errors[k] = v;
+                        });
+                        console.log(JSON.stringify(vm.errors));
+                    }
+                });
+            },
+
+        }
+    });
+
+    $(".multiple").multipleSelect({
+        filter: true,
+        multiple: true,
+        selectAll: true
+    });
+
+    $(function () {
+        $("#new-apply-form-target").multipleSelect("checkAll");
+    });
+
+    $('#form-cancel').on('click', function(){
+        window.location.href = '__PRO_PATH__/Hospital/index';
+    });
+
+    function getParams(){
+        var data = $('#new-apply-form').serializeArray();
+        $.each(data, function() {
+            vm.params[this.name] = this.value;
+        });
+
+        /*$.each(vm.patient, function (k, v) {
+            vm.params[k] = v;
+        });*/
+        console.log(JSON.stringify(data));
+        console.log(JSON.stringify(vm.params));
+    }
+</script>
+{else /}
+<div class="main-container">
+    <div class="padding-md">
+        <span class="col-lg-12" style="font-size: larger; text-align: center">
+			<strong>抱歉，您访问的页面不存在！</strong>
+		</span>
+    </div>
+</div>
+{include file="Common/bottom" /}
+{/if}
